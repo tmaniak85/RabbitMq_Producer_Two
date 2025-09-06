@@ -1,7 +1,6 @@
 package com.course.rabbitmq.two;
 
-import com.course.rabbitmq.two.entity.DummyMessage;
-import com.course.rabbitmq.two.producer.DummyProducer;
+import com.course.rabbitmq.two.producer.MultiplePrefetchProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,14 +14,13 @@ public class Application implements CommandLineRunner {
 	}
 
 	@Autowired
-	private DummyProducer producer;
+	private MultiplePrefetchProducer producer;
 
 	@Override
 	public void run(String... args) throws Exception {
-		for (int i = 0; i < 500; i++) {
-			var dummyMessage = new DummyMessage("Content " + i, 1);
+		producer.simulateTransaction();
+		producer.simulateScheduler();
 
-			producer.sendDummy(dummyMessage);
-		}
+		System.out.println("Al data sent");
 	}
 }
