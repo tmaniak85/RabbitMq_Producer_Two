@@ -1,8 +1,6 @@
 package com.course.rabbitmq.two;
 
-import com.course.rabbitmq.two.entity.InvoiceCancelledMessage;
 import com.course.rabbitmq.two.entity.InvoiceCreatedMessage;
-import com.course.rabbitmq.two.entity.InvoicePaidMessage;
 import com.course.rabbitmq.two.producer.InvoiceProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,19 +20,16 @@ public class Application implements CommandLineRunner {
 	@Autowired
 	private InvoiceProducer producer;
 
-	@Override
-	public void run(String... args) throws Exception {
-		var randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(100, 200);
-		var invoiceCreatedMassage = new InvoiceCreatedMessage(155.75, LocalDate.now(), "USD", randomInvoiceNumber);
-		producer.sendInvoiceCreated(invoiceCreatedMassage);
-
-		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(200, 300);
-		var randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
-		var invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
-		producer.sendInvoicePaid(invoicePaidMessage);
-
-		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
-		var invoiceCancelledMessage = new InvoiceCancelledMessage(LocalDate.now(), randomInvoiceNumber, "Invoice cancelled");
-		producer.sendInvoiceCancelled(invoiceCancelledMessage);
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        for (int i = 0; i < 200; i++) {
+            var invoiceNumber = "INV-" + (i % 60);
+            var invoice = new InvoiceCreatedMessage(
+                    ThreadLocalRandom.current().nextInt(1, 200),
+                    LocalDate.now(),
+                    "USD",
+                    invoiceNumber);
+            producer.sendInvoiceCreated(invoice);
+        }
+    }
 }
