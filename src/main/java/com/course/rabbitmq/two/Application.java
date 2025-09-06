@@ -7,8 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.concurrent.TimeUnit;
-
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
@@ -21,12 +19,10 @@ public class Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		for (int i = 0; i < 10_000; i++) {
+		for (int i = 0; i < 500; i++) {
 			var dummyMessage = new DummyMessage("Content " + i, 1);
 
 			producer.sendDummy(dummyMessage);
-
-			TimeUnit.SECONDS.sleep(1);
 		}
 	}
 }
