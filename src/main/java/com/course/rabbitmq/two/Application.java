@@ -1,5 +1,6 @@
 package com.course.rabbitmq.two;
 
+import com.course.rabbitmq.two.entity.InvoiceCancelledMessage;
 import com.course.rabbitmq.two.entity.InvoiceCreatedMessage;
 import com.course.rabbitmq.two.entity.InvoicePaidMessage;
 import com.course.rabbitmq.two.producer.InvoiceProducer;
@@ -31,5 +32,9 @@ public class Application implements CommandLineRunner {
 		var randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
 		var invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
 		producer.sendInvoicePaid(invoicePaidMessage);
+
+		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
+		var invoiceCancelledMessage = new InvoiceCancelledMessage(LocalDate.now(), randomInvoiceNumber, "Invoice cancelled");
+		producer.sendInvoiceCancelled(invoiceCancelledMessage);
 	}
 }

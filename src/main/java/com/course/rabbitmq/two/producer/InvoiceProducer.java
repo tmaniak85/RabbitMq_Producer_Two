@@ -1,5 +1,6 @@
 package com.course.rabbitmq.two.producer;
 
+import com.course.rabbitmq.two.entity.InvoiceCancelledMessage;
 import com.course.rabbitmq.two.entity.InvoiceCreatedMessage;
 import com.course.rabbitmq.two.entity.InvoicePaidMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,6 +20,10 @@ public class InvoiceProducer {
     }
 
     public void sendInvoicePaid(InvoicePaidMessage message) {
+        rabbitTemplate.convertAndSend(EXCHANGE, "", message);
+    }
+
+    public void sendInvoiceCancelled(InvoiceCancelledMessage message) {
         rabbitTemplate.convertAndSend(EXCHANGE, "", message);
     }
 
