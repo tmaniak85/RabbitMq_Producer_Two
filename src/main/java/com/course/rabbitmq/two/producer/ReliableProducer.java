@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
+//@Service
 public class ReliableProducer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReliableProducer.class);

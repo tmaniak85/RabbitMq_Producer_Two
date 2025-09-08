@@ -1,13 +1,13 @@
 package com.course.rabbitmq.two;
 
-import com.course.rabbitmq.two.entity.DummyMessage;
-import com.course.rabbitmq.two.producer.ReliableProducer;
+import com.course.rabbitmq.two.entity.InvoiceCancelledMessage;
+import com.course.rabbitmq.two.producer.InvoiceProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.concurrent.TimeUnit;
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -17,20 +17,18 @@ public class Application implements CommandLineRunner {
 	}
 
 	@Autowired
-	private ReliableProducer producer;
+	private InvoiceProducer producer;
 
     @Override
-    public void run(String... args) throws InterruptedException {
-		var dummyMessage = new DummyMessage("Dummy content", 1);
+    public void run(String... args) {
+		for (int i = 0; i < 10; i++) {
+			var invoiceNumber = "INV-" + i;
+			var invoiceCancelledMessage = new InvoiceCancelledMessage(
+					LocalDate.now(),
+					invoiceNumber,
+					"InvoiceCancelled " + i);
 
-		System.out.println("------------------------------------------------------------------");
-		System.out.println("Calling sendDummyToInvalidExchange()");
-        producer.sendDummyToInvalidExchange(dummyMessage);
-
-		TimeUnit.SECONDS.sleep(2);
-
-		System.out.println("------------------------------------------------------------------");
-		System.out.println("Calling sendDummyWithInvalidRoutingKey()");
-		producer.sendDummyWithInvalidRoutingKey(dummyMessage);
+			producer.sendInvoiceCancelled(invoiceCancelledMessage);
+		}
     }
 }
