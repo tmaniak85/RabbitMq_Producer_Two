@@ -1,7 +1,6 @@
 package com.course.rabbitmq.two;
 
-import com.course.rabbitmq.two.entity.DummyMessage;
-import com.course.rabbitmq.two.producer.AnotherDummyProducer;
+import com.course.rabbitmq.two.producer.StreamHelloProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,11 +14,13 @@ public class Application implements CommandLineRunner {
 	}
 
 	@Autowired
-	private AnotherDummyProducer producer;
+	private StreamHelloProducer producer;
 
     @Override
     public void run(String... args) {
-		var message = new DummyMessage("just a dummy", 1);
-		producer.sendDummy(message);
+		for (int i = 0; i < 3; i++) {
+			var str = "Hello stream " + i;
+			producer.sendHelloUsingExchange(str);
+		}
     }
 }
